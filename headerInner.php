@@ -1,9 +1,13 @@
+<?php
+    // session_start();
+    // var_dump($_SESSION);die;
+    ?>
 <div class="container">
     <header>
         <a id="logo" href="#">Ultimate Scheduler</a>
         <div>
             <div class="dropdown">
-                <a href="#" class="dropdown-toggle" class="menu1" data-toggle="dropdown"><img src="images/profile.png"></a>
+                <a href="#" class="dropdown-toggle" class="menu1" data-toggle="dropdown"><img src="images/<?php echo trim($_SESSION['fname']);?>.png"></a>
                 <ul class="dropdown-menu  dropdown-menu-right" id="menu1" aria-labelledby="menu1">
                     <li><a href="logout.php">Log off</a></li>
                 </ul>

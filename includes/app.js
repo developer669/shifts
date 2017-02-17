@@ -68,10 +68,9 @@ $("document").ready(function () {
         $("#myModal").modal();
         $(".modal-title").text("You are about to decline Moshe Cohen's constrains.");
         $(this).parent().parent().children().eq(0).removeClass("glyphicon-ok-sign").addClass("glyphicon-question-sign");
-        $(this).bind('click',function(){
-            week = $(this).data("week");
-            user = $(this).data("user");
-            console.log(week+"--"+user);
+        // $(".decline").bind('click',function(){
+            week = $(".decline").data("week");
+            user = $(".decline").data("user");
             // Here you can make validations about the limits of shifts
             $.post("actions/decline.php",
             {
@@ -80,14 +79,15 @@ $("document").ready(function () {
             },
             function(data, status){
                 console.log(data);
-                alert(data);
-                currentDom.fadeOut(300, function() { 
-                    currentDom.parent().parent().children().first().removeClass("glyphicon-question-sign").addClass("glyphicon-ok-sign");
-                    currentDom.remove(); 
+                // alert(data);
+                $(".decline").fadeOut(300, function() { 
+                    $(".decline").parent().parent().children().first().removeClass("glyphicon-question-sign").addClass("glyphicon-ok-sign");
+                    $(".decline").remove(); 
                 });
+                // window.location.reload()
 
             });
-        });
+        // });
     });
 
     $('.glyphicon-pencil').click(function () {
@@ -120,6 +120,7 @@ $("document").ready(function () {
             $('.dropdown-menu-right li:last').remove();
             $('.dropdown-menu-right').prepend('<li><a href="index.php" class="newLi">Next week shifts have been published<div class="clear"></div><small>1 min ago</small></a></li>');
         });
+        window.location.reload();
     });
 
 
@@ -127,30 +128,42 @@ $("document").ready(function () {
 
 
     $(".start").bind("click",function showAlert() {
-        $(this).prop( "disabled", true ).text("Running");
-        console.log($(this));
-        $(".progress").css("visibility", "visible");
-        var width = 10;
-        var id = setInterval(frame, 100);
-        function frame() {
-            if (width >= 100) {
-                clearInterval(id);
-                $(this).prop( "disabled", true ).text("Done");
-            } else {
-                width++;
-                $("#myBar").css({"width":width + '%'});
-                $('#currentProgress').text(width * 1  + '%');
+         week = $(".start").data("week");
+        
+        console.log(week);
+        // Here you can make validations about the limits of shifts
+        $.post("actions/automatic.php",
+        {
+            week: week
+        },
+        function(data, status){
+           $(this).prop( "disabled", true ).text("Running");
+            console.log(data);
+            $(".progress").css("visibility", "visible");
+            var width = 10;
+            var id = setInterval(frame, 100);
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(id);
+                    $(this).prop( "disabled", true ).text("Done");
+                } else {
+                    width++;
+                    $("#myBar").css({"width":width + '%'});
+                    $('#currentProgress').text(width * 1  + '%');
+                }
             }
-        }
 
-        setTimeout(function() {
-            $(".alert-success").alert();
-            $(".alert-success").fadeTo(2000, 500).slideUp(500, function(){
-                $(".alert-success").slideUp(500);
-                $(".progress").css("visibility", "hidden");
-                $(".start").text("Done");
+            setTimeout(function() {
+                $(".alert-success").alert();
+                $(".alert-success").fadeTo(2000, 500).slideUp(500, function(){
+                    $(".alert-success").slideUp(500);
+                    $(".progress").css("visibility", "hidden");
+                    $(".start").text("Done");
+                });
+            }, 10000);
             });
-        }, 10000);
+        });
+        
     });
 
     $("#notification").click(function () {
@@ -359,7 +372,7 @@ function ajaxCall() {
     //     user = $(this).data("user");
     //     console.log(week+"--"+user);
     //     // Here you can make validations about the limits of shifts
-    //     $.post("actions/post.php",
+    //     $.post("actions/automatic.php",
     //     {
     //         user: user,
     //         week: week
@@ -382,4 +395,4 @@ function ajaxCall() {
     //     });
     // });
 
-});
+// });
